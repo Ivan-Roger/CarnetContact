@@ -174,7 +174,7 @@ public class CarnetUI extends JPanel {
                 controleur.setContactSelected(false);
                 fiches.show(cardPanel,"groupe");                                
                 ficheGroupe.setValues((GroupeContacts) item); // affiche les données du groupe 
-                listeContacts.setSelectedGroupe((GroupeContacts)item);       
+                listeContacts.setSelectedGroupe((GroupeContacts)item);
             }
         }
     }

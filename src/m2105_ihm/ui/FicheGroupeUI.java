@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -42,6 +43,7 @@ public class FicheGroupeUI extends javax.swing.JPanel {
     private JTable       contactsT;
     private ArrayList<Contact> contactsList;
     private JButton btnView;
+    private JButton btnRem;
     
     /**
      * Creates new form CarnetUI
@@ -105,6 +107,8 @@ public class FicheGroupeUI extends javax.swing.JPanel {
         JPanel contactsLblP = new JPanel();
         contactsLblP.setLayout(new BorderLayout());
         contactsLblP.add(new JLabel("Contacts :",SwingConstants.RIGHT), BorderLayout.NORTH);
+        JPanel contactsLblP2 = new JPanel();
+        contactsLblP2.setLayout(new GridLayout(3,1));
         btnView = new JButton("Voir Fiche");
         btnView.addActionListener(new ActionListener() {
             @Override
@@ -113,7 +117,26 @@ public class FicheGroupeUI extends javax.swing.JPanel {
                 carnet.controleur.showContact(contactsList.get(index));
             }            
         });
-        contactsLblP.add(btnView, BorderLayout.SOUTH);
+        contactsLblP2.add(btnView);
+        btnRem = new JButton("Retirer");
+        btnRem.setEnabled(false);
+        btnRem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = contactsT.getSelectedRow();
+                carnet.controleur.supprimerContactGroupe(contactsList.get(index));
+            }            
+        });
+        contactsLblP2.add(btnRem);
+        JButton btnAdd = new JButton("Ajouter");
+        btnAdd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                carnet.controleur.ajouterContactGroupe(true);
+            }            
+        });
+        contactsLblP2.add(btnAdd);
+        contactsLblP.add(contactsLblP2, BorderLayout.CENTER);
         contenu.add(contactsLblP, gbc);
         JPanel contactsP = new JPanel();
         contactsP.setLayout(new BorderLayout());
@@ -123,6 +146,7 @@ public class FicheGroupeUI extends javax.swing.JPanel {
         contactsT = new JTable(contacts);
         contactsT.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
+                btnRem.setEnabled(true);
                 btnView.setEnabled(true);
             }
         });
@@ -174,7 +198,6 @@ public class FicheGroupeUI extends javax.swing.JPanel {
         nomGroupe.setText(groupe.getNom());
         contacts.setRowCount(0);
         contactsList.clear();
-        btnView.setEnabled(false);
         for (Contact c : groupe.getContacts()) {
             String [] val = { c.getNom(), c.getPrenom() };
             contacts.addRow(val);
@@ -191,6 +214,9 @@ public class FicheGroupeUI extends javax.swing.JPanel {
         symboles.setSelectedIndices(selected);
         
         zoneDessin.setPoints(groupe.getPoints());
+        
+        btnView.setEnabled(false);
+        btnRem.setEnabled(false);
         
         return true;
     }
@@ -211,7 +237,6 @@ public class FicheGroupeUI extends javax.swing.JPanel {
         }
         for (Object s : symboles.getSelectedValuesList().toArray()) {
             groupe.addSymbole((Symbole)s);
-            System.out.println("DEBUG : "+s.getClass().getSimpleName()+" - "+s);
         }
         /*
          * Ne pas s'occuper des membres du groupe car traité via des

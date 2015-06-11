@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import m2105_ihm.nf.Contact;
+import m2105_ihm.nf.Evenement;
 import m2105_ihm.nf.GroupeContacts;
 
 /**
@@ -21,21 +22,15 @@ import m2105_ihm.nf.GroupeContacts;
  * @author laurillau
  */
 public class BoiteDialogUI {
-    /**
-     * Boîte de dialogue pour confirmer la suppression d'un contact
-     * @param c un contact
-     * @return vrai si confirmé
-     */
-    public static boolean afficherConfirmation(JFrame fenetre, Contact c) {
+    public static boolean afficherConfirmation(JFrame fenetre, String titre, String message) {
         boolean res = false;
 
-        if (c != null) {
+        if (titre != null && message != null) {
             String [] choix = new String[] { "Supprimer", "Annuler" }; 
             
             Object selectedValue = JOptionPane.showOptionDialog(fenetre,
-                  "Voulez-vous vraiment supprimer le contact : " 
-                  + c.getPrenom() + " " + c.getNom() + " ?", 
-                  "Suppression d'un contact",
+                  message, 
+                  titre,
                   JOptionPane.DEFAULT_OPTION,
                   JOptionPane.QUESTION_MESSAGE, 
                   null,
@@ -44,19 +39,6 @@ public class BoiteDialogUI {
             );
             res = (((Integer) selectedValue) == 0);
         }
-        
-        return res;
-    }
-
-    /**
-     * Boîte de dialogue pour confirmer la suppression d'un groupe de contacts
-     * @param g un groupe de contacts
-     * @return vrai si confirmé
-     */    
-    public static boolean afficherConfirmation(JFrame fenetre, GroupeContacts g) {
-        boolean res = false;
-
-        /** TP5 : à compléter **/
         
         return res;
     }

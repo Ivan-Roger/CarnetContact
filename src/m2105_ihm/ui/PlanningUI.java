@@ -5,6 +5,8 @@ package m2105_ihm.ui;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -50,7 +52,7 @@ public class PlanningUI extends JPanel {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                ficheEvenement.setValues(getSelectedEvt(),listeEvt.getSelectedIndex());
+                ficheEvenement.setValues(getSelectedEvt(), listeEvt.getSelectedIndex());
                 controleur.setEvtSelected(true);
             }
         });
@@ -80,12 +82,16 @@ public class PlanningUI extends JPanel {
         if (evt == null) {
             return false;
         } else {
-            modelListeEvt.addElement(evt);
             events.add(evt);
+            tri(events);
+            modelListeEvt.clear();
+            for (Evenement e : events) {
+                modelListeEvt.addElement(e);
+            }
             return true;
         }
     }
-    
+
     /**
      * Retire une entrée dans la liste de événements
      *
@@ -111,12 +117,14 @@ public class PlanningUI extends JPanel {
 
         if (modified) {
             ficheEvenement.getValues(c);
-            int index = modelListeEvt.indexOf(c);
-            modelListeEvt.remove(index);
-            modelListeEvt.add(index, c);
-            listeEvt.setSelectedIndex(index);
+            tri(events);
+            modelListeEvt.clear();
+            for (Evenement e : events) {
+                modelListeEvt.addElement(e);
+            }
+            listeEvt.setSelectedIndex(modelListeEvt.indexOf(c));
         } else {
-            ficheEvenement.setValues(c,listeEvt.getSelectedIndex());
+            ficheEvenement.setValues(c, listeEvt.getSelectedIndex());
         }
     }
 
@@ -128,20 +136,24 @@ public class PlanningUI extends JPanel {
     }
 
     public Evenement getPrevEvt() {
-        if (listeEvt.getSelectedIndex() < 1) { return null; } else {
-            return events.get(listeEvt.getSelectedIndex()-1);
+        if (listeEvt.getSelectedIndex() < 1) {
+            return null;
+        } else {
+            return events.get(listeEvt.getSelectedIndex() - 1);
         }
     }
 
-    Evenement getNextEvt() {
-        if (listeEvt.getSelectedIndex() > events.size()-2) { return null; } else {
-            return events.get(listeEvt.getSelectedIndex()+1);
+    public Evenement getNextEvt() {
+        if (listeEvt.getSelectedIndex() > events.size() - 2) {
+            return null;
+        } else {
+            return events.get(listeEvt.getSelectedIndex() + 1);
         }
     }
 
-    Evenement getNextEvtFromNow() {
+    public Evenement getNextEvtFromNow() {
         Evenement evt = null;
-        GregorianCalendar last = events.get(events.size()-1).getDate();
+        GregorianCalendar last = events.get(events.size() - 1).getDate();
         for (Evenement e : events) {
             if (e.getDate().after(new GregorianCalendar()) && e.getDate().before(last)) {
                 last = e.getDate();
@@ -149,5 +161,14 @@ public class PlanningUI extends JPanel {
             }
         }
         return evt;
+    }
+
+    private void tri(ArrayList<Evenement> events) {
+        Collections.sort(events, new Comparator<Evenement>() {
+            @Override
+            public int compare(Evenement evt1, Evenement evt2) {
+                return evt1.getDate().compareTo(evt2.getDate());
+            }
+        });
     }
 }

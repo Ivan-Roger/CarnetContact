@@ -33,7 +33,7 @@ public enum Mois implements java.io.Serializable {
     public static Mois valueOf(int index) {
         Mois res = null;
         for (Mois m : Mois.values()) {
-            if (m.ordinal()+1 == index) {
+            if (m.ordinal() == index) {
                 res = m;
             }
         }

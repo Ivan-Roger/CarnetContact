@@ -79,7 +79,6 @@ public class ZoneDessinUI extends Canvas  {
         Dimension dim = getSize();        
         polygon.reset();
         this.repaint();
-        System.out.println("Zone de Dessin effacé");
     }
         
     /**

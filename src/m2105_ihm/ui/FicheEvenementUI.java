@@ -139,8 +139,8 @@ public class FicheEvenementUI extends JPanel {
         dateP.add(champDateJour);
 
         champDateMois = new JComboBox();
-        for (Integer i = 1;
-                i <= 12; i++) {
+        for (Integer i = 0;
+                i <= 11; i++) {
             champDateMois.addItem(Mois.valueOf(i));
         }
 
@@ -266,16 +266,8 @@ public class FicheEvenementUI extends JPanel {
     }
 
     public boolean setValues(Evenement evt, int index) {
-        if (planning.getPrevEvt()==null) {
-            btnPrev.setEnabled(false);
-        } else {
-            btnPrev.setEnabled(true);
-        }
-        if (planning.getNextEvt()==null) {
-            btnNext.setEnabled(false);
-        } else {
-            btnNext.setEnabled(true);
-        }
+        btnPrev.setEnabled(planning.getPrevEvt()!=null);
+        btnNext.setEnabled(planning.getNextEvt()!=null);
         if (evt == null) {
             return false;
         } else {
@@ -305,7 +297,7 @@ public class FicheEvenementUI extends JPanel {
         } else {
             evt.setIntitule(champIntitule.getText());
 
-            evt.setDate((Integer) champDateJour.getSelectedItem(), (Integer) ((Mois)champDateMois.getSelectedItem()).ordinal()+1 , (Integer) champDateAnnee.getSelectedItem());
+            evt.setDate((Integer) champDateJour.getSelectedItem(), (Integer) ((Mois)champDateMois.getSelectedItem()).ordinal() , (Integer) champDateAnnee.getSelectedItem());
             return true;
         }
     }

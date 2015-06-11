@@ -63,7 +63,7 @@ public class Controleur {
          * TP5 : à compléter *
          */
         Contact contact = carnetUI.getSelectedContact();
-        if (BoiteDialogUI.afficherConfirmation(fenetre, contact)) {
+        if (BoiteDialogUI.afficherConfirmation(fenetre, "Suppression d'un contact", "Voulez-vous vraiment supprimer le contact \"" + contact + "\" ?")) {
             carnetUI.retirerContact(contact);
             nf.removeContact(contact);
         }
@@ -95,7 +95,7 @@ public class Controleur {
          * TP5 : à compléter *
          */
         GroupeContacts groupe = carnetUI.getSelectedGroupe();
-        if (BoiteDialogUI.afficherConfirmation(fenetre, groupe)) {
+        if (BoiteDialogUI.afficherConfirmation(fenetre, "Suppression d'un groupe", "Voulez-vous vraiment supprimer le groupe \"" + groupe + "\" ?")) {
             carnetUI.retirerGroupe(groupe);
             nf.removeGroupe(groupe);
         }
@@ -114,15 +114,34 @@ public class Controleur {
         }
     }
 
+    public void ajouterContactGroupe(boolean b) {
+        GroupeContacts g = carnetUI.getSelectedGroupe();
+        Contact c = BoiteDialogUI.afficherChoixContact(fenetre, "Ajouter contact", nf.getContacts());
+        if (c != null) {
+            g.addContact(c);
+            carnetUI.setSelectedItem(g);
+        }
+    }
+
     /**
      * Action supprimer un contact d'un groupe
      */
     public void supprimerContactGroupe() {
 
         Contact contact = carnetUI.getSelectedContact();
-        GroupeContacts groupe = BoiteDialogUI.afficherChoixGroupe(fenetre, "Supprimer d'un groupe", nf.getGroupes());
+        GroupeContacts groupe = BoiteDialogUI.afficherChoixGroupe(fenetre, "Retirer d'un groupe", nf.getGroupes());
         if (groupe != null) {
             groupe.removeContact(contact);
+        }
+    }
+
+    public void supprimerContactGroupe(Contact c) {
+        GroupeContacts g = carnetUI.getSelectedGroupe();
+        if (BoiteDialogUI.afficherConfirmation(fenetre, "Retirer du groupe", "Voulez-vous vraiment retirer \"" + c + "\" du groupe \"" + g + "\" ?")) {
+            if (g != null) {
+                g.removeContact(c);
+                carnetUI.setSelectedItem(g);
+            }
         }
     }
 
@@ -143,10 +162,12 @@ public class Controleur {
      * Supprime un événement existant
      */
     public void supprimerEvenement() {
-
-        /**
-         * Projet *
-         */
+        Evenement e = planningUI.getSelectedEvt();
+        if (BoiteDialogUI.afficherConfirmation(fenetre, "Suppression d'un evenement", "Voulez-vous vraiment supprimer l'evenement \"" + e + "\" ?")) {
+            nf.removeEvenement(e);
+            planningUI.retirerEvt(e);
+            this.setEvtSelected(false);
+        }
     }
 
     /**
@@ -170,10 +191,6 @@ public class Controleur {
      * Retire un participant d'un événement
      */
     public void retirerParticipantEvenement() {
-
-        /**
-         * Projet *
-         */
         /**
          * Projet *
          */
@@ -182,6 +199,16 @@ public class Controleur {
         if (contact != null) {
             evt.removeParticipant(contact);
             planningUI.setSelectedEvt(evt);
+        }
+    }
+
+    public void retirerParticipantEvenement(Contact c) {
+        Evenement e = planningUI.getSelectedEvt();
+        if (BoiteDialogUI.afficherConfirmation(fenetre, "Retirer de l'evenement", "Voulez-vous vraiment retirer \"" + c + "\" de l'evenement \"" + e + "\" ?")) {
+            if (e != null) {
+                e.removeParticipant(c);
+                planningUI.setSelectedEvt(e);
+            }
         }
     }
 
@@ -231,7 +258,9 @@ public class Controleur {
         for (Evenement e : nf.getEvenements()) {
             planningUI.ajouterEvt(e);
         }
-        if (nf.getEvenements().length>0) { planningUI.setSelectedEvt(nf.getEvenements()[0]); }
+        if (nf.getEvenements().length > 0) {
+            planningUI.setSelectedEvt(planningUI.getNextEvtFromNow());
+        }
 
         carnetUI.show();
     }
@@ -258,13 +287,5 @@ public class Controleur {
     public void showEvenement(Evenement e) {
         fenetre.showtab("Planning");
         planningUI.setSelectedEvt(e);
-    }
-
-    public void retirerParticipantEvenement(Contact contact) {
-        Evenement evt = planningUI.getSelectedEvt();
-        if (contact != null) {
-            evt.removeParticipant(contact);
-            planningUI.setSelectedEvt(evt);
-        }        
     }
 }

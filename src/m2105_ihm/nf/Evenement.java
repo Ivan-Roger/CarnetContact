@@ -138,9 +138,10 @@ public class Evenement implements java.io.Serializable {
      * @return chaîne de caractères contenant la date et l'intitulé
      */
     public String toString() {
-        int jour = date.get(Calendar.DAY_OF_MONTH);
-        int mois = date.get(Calendar.MONTH);
+        String jour = (date.get(Calendar.DAY_OF_MONTH)<10 ? "0"+date.get(Calendar.DAY_OF_MONTH) : Integer.toString(date.get(Calendar.DAY_OF_MONTH)));
+        int dMois = date.get(Calendar.MONTH)+1;
+        String mois = (dMois<10 ? "0"+dMois : Integer.toString(dMois));
         int annee = date.get(Calendar.YEAR);
-        return jour+"/"+mois+"/"+annee+ " : " + intitule;
+        return jour+"/"+mois+"/"+annee+ " - " + intitule;
     }
 }
